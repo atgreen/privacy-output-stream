@@ -26,10 +26,11 @@
 (defmethod stream-write-string ((stream privacy-output-stream)
                                 string &optional start end)
   (dolist (secret (secrets stream))
-    (setf string (with-output-to-string (out)
-                   (loop with start = 0
-                         for pos = (search secret string :start2 start)
-                         do (write-string string out :start start :end pos)
-                         when pos do (dotimes (x (length secret)) (write-char #\* out))
-                           while pos do (setf start (+ pos (length secret)))))))
+    (let ((secret (secret-value:reveal-value secret)))
+      (setf string (with-output-to-string (out)
+                     (loop with start = 0
+                           for pos = (search secret string :start2 start)
+                           do (write-string string out :start start :end pos)
+                           when pos do (dotimes (x (length secret)) (write-char #\* out))
+                             while pos do (setf start (+ pos (length secret))))))))
   (write-string string (stream-of stream) :start start :end end))

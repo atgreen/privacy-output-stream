@@ -31,4 +31,4 @@
   :serial t
   :components ((:file "package")
                (:file "privacy-output-stream"))
-  :depends-on (:trivial-gray-streams))
+  :depends-on (:trivial-gray-streams :secret-values))

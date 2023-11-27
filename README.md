@@ -8,7 +8,9 @@ For example, the following code:
 ```
 (let ((*standard-output* (make-instance 'privacy-output-stream
                                         :stream *standard-output*
-                                        :secrets '("passw0rd" "sekret"))))
+                                        :secrets
+                                        (mapcar #'secret-values:conceal-value
+                                                '("passw0rd" "sekret")))))
   (format t "Hello, my password is passw0rd~%"))
 ```
 
@@ -17,10 +19,10 @@ For example, the following code:
 Hello, my password is ********
 ```
 
-```secrets``` is a list of secret values you want to mask in the final
-output.  They are processed in order, so I recommend that you sort
-your secrets by length (longest first) in case one is a substring of
-another.
+`secrets` is a list of concealed secret values you want to mask in
+the final output.  Use `secret-values:conceal-value` to conceal them.
+They are processed in order, so I recommend that you sort your secrets
+by length (longest first) in case one is a substring of another.
 
 Note also that `privacy-output-stream` only masks secrets that are
 presented in full as part of a string or sequence being written to the
